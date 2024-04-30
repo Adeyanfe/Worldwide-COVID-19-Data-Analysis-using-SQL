@@ -18,4 +18,5 @@ In addition to the queries are views created to store the results of the analysi
 2. Europe had the highest total cases per continent, followed by North America, Asia, and South America.
 3. United states, Brazil, Mexico, and India recorded the highest deaths.
 4. United satates, India, Brazil, and Russia had the total number of confirmed cases.
-5. The findings from this analysis will help to contribute to making well-informed-decisions, allocation of resources appropriately and shaping efficient public health strategies.
+5. The global percentage death was 2.5 percent.
+6. The findings from this analysis will help to contribute to making well-informed-decisions, allocation of resources appropriately and shaping efficient public health strategies.
