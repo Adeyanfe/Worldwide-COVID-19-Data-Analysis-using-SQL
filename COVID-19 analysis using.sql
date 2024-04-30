@@ -56,7 +56,6 @@ where continent IS NOT NULL
 GROUP BY location, continent
 ORDER BY cummulative_total_deaths DESC;
 
-
 ---8. Country with the highest death counts
 SELECT location, continent, MAX(total_deaths) as highestDeathCount
 FROM coviddeaths
@@ -127,7 +126,77 @@ JOIN CovidVaccinations
 ON CovidDeaths.location = CovidVaccinations.location
 AND CovidDeaths.date = CovidVaccinations.date;
 
-----16. Creating view
+----17. What percentage of Population that has received at least one Covid Vaccine
+SELECT death.continent, death.location, death.date, death.population, vac.new_vaccinations, SUM(CAST(vac.new_vaccinations AS bigint)) OVER 
+(PARTITION BY death.location ORDER BY death.location, death.date) AS RollingPeopleVaccinated
+FROM  CovidDeaths death
+JOIN CovidVaccinations vac
+	ON death.location = vac.location
+	AND death.date = vac.date
+WHERE death.continent IS NOT NULL
+ORDER BY 2,3;
+
+----18. Getting the percentage of RollingPeopleVaccinated for each location
+
+-- Using CTE to perform Calculation on Partition By in previous query
+
+WITH PopvsVac (Continent, Location, Date, Population, New_vaccination, RollingPeopleVaccinated)
+AS
+(
+SELECT death.continent, death.location, death.date, death.population, vac.new_vaccinations,
+SUM(CAST(vac.new_vaccinations AS bigint)) OVER (PARTITION BY death.location ORDER BY death.location, death.date) AS RollingPeopleVaccinated
+FROM  CovidDeaths death
+JOIN CovidVaccinations vac
+	ON death.location = vac.location
+	AND death.date = vac.date
+WHERE death.continent IS NOT NULL
+--ORDER BY 2,3
+)
+SELECT *, (RollingPeopleVaccinated/Population) * 100 AS RollingPeopleVaccinatedPercentage
+FROM PopvsVac;
+
+----19. Using Temp Table to perform Calculation on Partition By in previous query
+
+DROP TABLE IF EXISTS  #PercentPopulationVaccinated
+CREATE TABLE #PercentPopulationVaccinated
+(
+Continent nvarchar(255),
+Location nvarchar(255),
+Date datetime,
+Population numeric,
+New_Vaccinations numeric,
+RollingPeopleVaccinated numeric
+)
+
+INSERT INTO #PercentPopulationVaccinated
+SELECT death.continent, death.location, death.date, death.population, vac.new_vaccinations, 
+SUM(CAST(vac.new_vaccinations AS bigint)) OVER (PARTITION BY death.location ORDER BY death.location, death.date) AS RollingPeopleVaccinated
+FROM  CovidDeaths death
+JOIN CovidVaccinations vac
+	ON death.location = vac.location
+	AND death.date = vac.date
+--WHERE death.continent IS NOT NULL
+--ORDER BY 2,3
+
+SELECT *, (RollingPeopleVaccinated/Population) * 100 AS PercentRollingPeopleVaccinated
+FROM #PercentPopulationVaccinated;
+
+
+
+----19. Creating view
+
+CREATE VIEW PercentPopulationVaccinated AS
+SELECT death.continent, death.location, death.date, death.population, vac.new_vaccinations, SUM(CAST(vac.new_vaccinations AS bigint)) OVER 
+(PARTITION BY death.location ORDER BY death.location, death.date) AS RollingPeopleVaccinated
+FROM  CovidDeaths death
+JOIN CovidVaccinations vac
+	ON death.location = vac.location
+	AND death.date = vac.date
+WHERE death.continent IS NOT NULL
+--ORDER BY 2,3
+
+SELECT *
+FROM PercentPopulationVaccinated;
 
 Create View GlobalCasesPerDay AS 
 SELECT date, SUM(new_cases) as total_newcases, sum(new_deaths) as total_newdeaths, 
