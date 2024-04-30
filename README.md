@@ -13,5 +13,9 @@ This repository contains SQL statements for analyzing COVID-19 datasets. The goa
 6. Percentage of Population Infected: This query determine the percentage of the population affected by COVID-19 by comparing total cases to population size allows us to evaluate the virus's spread in different regions.
 7. Highest Infection Rate: This query identifies the country with the highest infection rate relative to its population and also, calculates the percentage of the population infected and highlights the most heavily impacted location.
 In addition to the queries are views created to store the results of the analysis to be used for further exploration and data visualizations.
-## Conclusion
-The findings from this analysis will help to contribute to making well-informed-decisions, allocation of resources appropriately and shaping efficient public health strategies.
+## Findings
+1. Europe had the total number of deaths recorded as per continent, followed by North America, South America, and Asia.
+2. Europe had the highest total cases per continent, followed by North America, Asia, and South America.
+3. United states, Brazil, Mexico, and India recorded the highest deaths.
+4. United satates, India, Brazil, and Russia had the total number of confirmed cases.
+5. The findings from this analysis will help to contribute to making well-informed-decisions, allocation of resources appropriately and shaping efficient public health strategies.
