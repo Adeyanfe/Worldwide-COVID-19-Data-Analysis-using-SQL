@@ -182,8 +182,7 @@ SELECT *, (RollingPeopleVaccinated/Population) * 100 AS PercentRollingPeopleVacc
 FROM #PercentPopulationVaccinated;
 
 
-
-----19. Creating view
+----20. Creating view
 
 CREATE VIEW PercentPopulationVaccinated AS
 SELECT death.continent, death.location, death.date, death.population, vac.new_vaccinations, SUM(CAST(vac.new_vaccinations AS bigint)) OVER 
